@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "595369236292",
+    "project_id": "ags-project-fce93",
+    "storage_bucket": "ags-project-fce93.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:595369236292:android:e8d60782293d2cb917a911",
+        "android_client_info": {
+          "package_name": "anjaligeneralstore.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQRExI5TMaObfcWjdNko-x1Y9B791Fn2E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

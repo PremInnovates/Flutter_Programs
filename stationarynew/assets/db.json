@@ -1,0 +1,577 @@
+[
+  {
+    "name": "ANGEL DOLL",
+    "price": 499,
+    "image": "assets/images/angel_girl.png"
+  },
+  {
+    "name": "BIG CADBURY CELEBRATION",
+    "price": 159,
+    "image": "assets/images/cadburyCelebration.png"
+  },
+  {
+    "name": "FEVICRYL COLOURS",
+    "price": 249,
+    "image": "assets/images/fevicryl_Colours.png"
+  },
+  {
+    "name": "CAMEL ART KIT",
+    "price": 99,
+    "image": "assets/images/CamelArtKit.png"
+  },
+  {
+    "name": "WHITE PEN",
+    "price": 79,
+    "image": "assets/images/white_Pen.png"
+  },
+  {
+    "name": "FOLDABLE STUDY TABLE",
+    "price": 499,
+    "image": "assets/images/foldable_table.png"
+  },
+  {
+    "name": "CAMEL FOUNTAIN PEN INK (RED)",
+    "price": 24,
+    "image": "assets/images/camelfountaininkred.png"
+  },
+  {
+    "name": "CLOTH DRY ROPE",
+    "price": 79,
+    "image": "assets/images/clothdryrope.png"
+  },
+  {
+    "name": "MANIQUEE (SET OF 4)",
+    "price": 449,
+    "image": "assets/images/marquee.png"
+  },
+  {
+    "name": "DOMS PERMANENT MARKER (BLACK)",
+    "price": 199,
+    "image": "assets/images/domswhiteboardmarker.png"
+  },
+  {
+    "name": "MAKE-UP BOX TOYS",
+    "price": 499,
+    "image": "assets/images/makeuptoy.png"
+  },
+  {
+    "name": "CLASSMATE AVENGERS INVENTO COMPASS",
+    "price": 149,
+    "image": "assets/images/classmateavengercompass.png"
+  },
+  {
+    "name": "CAMLIN PAINT MARKER BOLD-E",
+    "price": 549,
+    "image": "assets/images/camlinpaintmarker.png"
+  },
+  {
+    "name": "ARTIFICIAL DECORATIVE FLOWER STRING BUNCH",
+    "price": 219,
+    "image": "assets/images/flower.png"
+  },
+  {
+    "name": "CAMLIN PERMANENT MARKER BLACK",
+    "price": 99,
+    "image": "assets/images/camlinmarker10.png"
+  },
+  {
+    "name": "DOMS AQUA COLOUR CAKES 12 SHADES",
+    "price": 64,
+    "image": "assets/images/domsaquacolour12.png"
+  },
+  {
+    "name": "CAMLIN WHITEBOARD MARKER INK (RED)",
+    "price": 29,
+    "image": "assets/images/camlinwhiteboardmarkerink(red).png"
+  },
+  {
+    "name": "CAMLIN PERMANENT INK (BLUE) 100ML",
+    "price": 209,
+    "image": "assets/images/camlinpermanentmarkerinkblue.png"
+  },
+  {
+    "name": "NAVO VYAPAR",
+    "price": 219,
+    "image": "assets/images/navovepar.png"
+  },
+  {
+    "name": "DOMS SMART KIT",
+    "price": 499,
+    "image": "assets/images/domssmartkit.png"
+  },
+  {
+    "name": "CASIO CALCULATOR",
+    "price": 489,
+    "image": "assets/images/casiocalculator.png"
+  },
+  {
+    "name": "CADBURY CELEBRATION",
+    "price": 49,
+    "image": "assets/images/cadburyCelebration1.png"
+  },
+  {
+    "name": "TAPE DISPENSER",
+    "price": 69,
+    "image": "assets/images/tapedispenser.png"
+  },
+  {
+    "name": "SHOOK PEN",
+    "price": 79,
+    "image": "assets/images/shockpen.png"
+  },
+  {
+    "name": "UNICORN LUDO WITH SNAKES & LADDERS",
+    "price": 199,
+    "image": "assets/images/unicornludo.png"
+  },
+  {
+    "name": "LOVING FAMILY HOUSE",
+    "price": 439,
+    "image": "assets/images/lovingfamilyhouse.png"
+  },
+  {
+    "name": "DECORATIVE ARTIFICIAL WISTERIA FLOWER BUNCH (SET OF 12)",
+    "price": 329,
+    "image": "assets/images/decorativeflower.png"
+  },
+  {
+    "name": "CAMLIN RUBBER STAMP INK",
+    "price": 34,
+    "image": "assets/images/camlinrubberstampink.png"
+  },
+  {
+    "name": "SAINO SOFTEK",
+    "price": 80,
+    "image": "assets/images/sainosoftek.png"
+  },
+  {
+    "name": "DOMS WHITEBOARD MARKER PEN (RED)",
+    "price": 249,
+    "image": "assets/images/domswhitemarkerink(red).png"
+  },
+  {
+    "name": "FOLDABLE STUDY TABLE",
+    "price": 499,
+    "image": "assets/images/foldableStudytable.png"
+  },
+  {
+    "name": "CAMLIN PERMANENT INK (RED)",
+    "price": 24,
+    "image": "assets/images/camlinpermanenetinkred.png"
+  },
+  {
+    "name": "DOMS SUPERIO PENCILS",
+    "price": 125,
+    "image": "assets/images/domssuperiopencil.png"
+  },
+  {
+    "name": "CAMLIN PERMANENT INK (BLUE)",
+    "price": 25,
+    "image": "assets/images/camlinpermanentinkblure.png"
+  },
+  {
+    "name": "CAMLIN WHITEBOARD MARKER INK (BLACK)",
+    "price": 29,
+    "image": "assets/images/camlinwhiteboardmarkerinkblack.png"
+  },
+  {
+    "name": "UNO AVENGERS CARD GAME",
+    "price": 99,
+    "image": "assets/images/unoavenger.png"
+  },
+  {
+    "name": "SHOOK CHEWING GUM",
+    "price": 79,
+    "image": "assets/images/shookchewinggum.png"
+  },
+  {
+    "name": "ROYAL LUDO & SNAKES AND LADDERS",
+    "price": 179,
+    "image": "assets/images/royaludo.png"
+  },
+  {
+    "name": "FLAIR DIAMOND PENCIL",
+    "price": 99,
+    "image": "assets/images/flairdiamondpencil.png"
+  },
+  {
+    "name": "BOX FILE",
+    "price": 109,
+    "image": "assets/images/boxfile.png"
+  },
+  {
+    "name": "CAMLIN MARKER (RED)",
+    "price": 99,
+    "image": "assets/images/camlinmarker(red).png"
+  },
+  {
+    "name": "PASSPORT FOLDER",
+    "price": 319,
+    "image": "assets/images/passportfolder.png"
+  },
+  {
+    "name": "DOMS AQUA COLOUR CAKES 24 SHADES",
+    "price": 119,
+    "image": "assets/images/domsaquacolourcake.png"
+  },
+  {
+    "name": "NAVO VYAPAR",
+    "price": 279,
+    "image": "assets/images/newvyapar.png"
+  },
+  {
+    "name": "STUDY BOOK INTELLECTUAL LEARNING",
+    "price": 489,
+    "image": "assets/images/studybook.png"
+  },
+  {
+    "name": "SAINO TRIO",
+    "price": 80,
+    "image": "assets/images/sainotrio.png"
+  },
+  {
+    "name": "ORBIT CALCULATOR",
+    "price": 119,
+    "image": "assets/images/orbitcalculator.png"
+  },
+  {
+    "name": "CAMLIN FOUNTAIN INK (BLACK)",
+    "price": 29,
+    "image": "assets/images/camlinfountainink(black).png"
+  },
+  {
+    "name": "TAPE DISPENSER",
+    "price": 159,
+    "image": "assets/images/bigtapedispenser.png"
+  },
+  {
+    "name": "CLASSMATE FOUR-LINE NOTE (SET OF 12)",
+    "price": 624,
+    "image": "assets/images/classmatefourline.png"
+  },
+  {
+    "name": "UNO CARDS",
+    "price": 59,
+    "image": "assets/images/uno.png"
+  },
+  {
+    "name": "REMOTE CONTROL CAR 360 DEGREE",
+    "price": 720,
+    "image": "assets/images/remotecontrolcar360degree.png"
+  },
+  {
+    "name": "DECORATIVE HANGING ORNAMENT",
+    "price": 49,
+    "image": "assets/images/decorativehangingornament.png"
+  },
+  {
+    "name": "WISDOM GAME",
+    "price": 149,
+    "image": "assets/images/wisdomgame.png"
+  },
+  {
+    "name": "CADBURY CELEBRATION – (Assorted Gift Pack)",
+    "price": 109,
+    "image": "assets/images/cadburycelebrationspark.png"
+  },
+  {
+    "name": "DECORATIVE ARTIFICIAL MAPLE LEAF BUNCH (SET OF 12)",
+    "price": 339,
+    "image": "assets/images/decorativeartificialmapleleaf.png"
+  },
+  {
+    "name": "DOMS GEOMITI",
+    "price": 99,
+    "image": "assets/images/domsgeomiti.png"
+  },
+  {
+    "name": "CAMEL BRUSH PEN 24 SHADES",
+    "price": 439,
+    "image": "assets/images/camelbrushpen24shades.png"
+  },
+  {
+    "name": "CLOTH HANGER (SET OF 12)",
+    "price": 79,
+    "image": "assets/images/clothhanger.png"
+  },
+  {
+    "name": "CAMLIN WHITE BOARD INK (BLACK) 100ML",
+    "price": 239,
+    "image": "assets/images/camlinwhiteboardink(black)100ml.png"
+  },
+  {
+    "name": "UNO DRAGON BALL Z",
+    "price": 99,
+    "image": "assets/images/unodragonballz.png"
+  },
+  {
+    "name": "CAMLIN PASTE (700ML)",
+    "price": 69,
+    "image": "assets/images/camlinpaste700ml.png"
+  },
+  {
+    "name": "MB MODEL CAR",
+    "price": 319,
+    "image": "assets/images/mbmodelcar.png"
+  },
+  {
+    "name": "DOMS GROOVE ERASER",
+    "price": 24,
+    "image": "assets/images/domsgrooveeraser.png"
+  },
+  {
+    "name": "PEXON LCD PENCIL BOX",
+    "price": 219,
+    "image": "assets/images/pexonlcdpencilbox.png"
+  },
+  {
+    "name": "CAMEL STUDENT POSTER COLOURS",
+    "price": 209,
+    "image": "assets/images/camelstudentpotercolours.png"
+  },
+  {
+    "name": "UNO FROZEN-II GAME CARD",
+    "price": 99,
+    "image": "assets/images/unofrozen-iigamecard.png"
+  },
+  {
+    "name": "SAINO MISTI",
+    "price": 80,
+    "image": "assets/images/sainomisti.png"
+  },
+  {
+    "name": "ORBIT SMALL CALCULATOR",
+    "price": 79,
+    "image": "assets/images/orbitsmallcalculator.png"
+  },
+  {
+    "name": "TUMBLE TOWER",
+    "price": 399,
+    "image": "assets/images/tumbletower.png"
+  },
+  {
+      "name": "CAMLIN BOLD-E WHITE BOARD MARKER (BLACK)",
+      "price": 279,
+      "image": "assets/images/camlinboldewhiteboardmarker(black).png"
+    },
+    {
+      "name": "TENNIS TRAINER",
+      "price": 299,
+      "image": "assets/images/tennistrainer.png"
+    },
+    {
+      "name": "MIDI CHESS – THE BATTLE OF BRAINS",
+      "price": 299,
+      "image": "assets/images/midichess.png"
+    },
+    {
+      "name": "FROZEN FEVER MONEY BANK",
+      "price": 199,
+      "image": "assets/images/frozenfevermoneybank.png"
+    },
+    {
+      "name": "DOMS AMARIZ KNEADABLE ART ERASER",
+      "price": 54,
+      "image": "assets/images/domsamarizarteraser.png"
+    },
+    {
+      "name": "DOMS KIT",
+      "price": 99,
+      "image": "assets/images/domskit.png"
+    },
+    {
+      "name": "CLASSMATE VICTOR COMPASS",
+      "price": 89,
+      "image": "assets/images/classmatevictorcompass.png"
+    },
+    {
+      "name": "ELEGENT LORD GANESHA LED SHOWPIECE",
+      "price": 299,
+      "image": "assets/images/elegantloadganeshaled.png"
+    },
+    {
+      "name": "KIDS PIANO",
+      "price": 279,
+      "image": "assets/images/kidspiano.png"
+    },
+    {
+      "name": "ARTIFICIAL FLOWER GARLAND",
+      "price": 149,
+      "image": "assets/images/artificialflowergarland.png"
+    },
+    {
+      "name": "GOOD KNIGHT REFILL",
+      "price": 35,
+      "image": "assets/images/goodknightrefill.png"
+    },
+    {
+      "name": "SANDISK 64GB PEN-DRIVE",
+      "price": 599,
+      "image": "assets/images/sandisk64gbpendrive.png"
+    },
+    {
+      "name": "TRANSPARENT FILE",
+      "price": 29,
+      "image": "assets/images/trasnparentfile.png"
+    },
+    {
+      "name": "CADBURY CELEBRATIONS PREMIUM SELECTIONS",
+      "price": 224,
+      "image": "assets/images/cadburycelebrationpremium.png"
+    },
+    {
+      "name": "CLOTH DRY ROPE WITH PIN",
+      "price": 109,
+      "image": "assets/images/clothdryropewithpin.png"
+    },
+    {
+      "name": "FOLDABLE STUDY TABLE",
+      "price": 499,
+      "image": "assets/images/foldablestudytablecar.png"
+    },
+    {
+      "name": "ARTIFICIAL DECORATIVE FLOWER STRING BUNCH",
+      "price": 219,
+      "image": "assets/images/artificialdecorativeflowers.png"
+    },
+    {
+      "name": "CAMLIN EXAM COMPASS",
+      "price": 149,
+      "image": "assets/images/camlinexamcompass.png"
+    },
+    {
+      "name": "CAMLIN FOUNTAIN PEN INK (BLUE)",
+      "price": 29,
+      "image": "assets/images/camlinfountainpenink(blue).png"
+    },
+    {
+      "name": "TABLE INDIAN FLAG",
+      "price": 79,
+      "image": "assets/images/tableindianflag.png"
+    },
+    {
+      "name": "ARTIFICIAL LEAF GARLAND",
+      "price": 29,
+      "image": "assets/images/artificialleafgarland.png"
+    },
+    {
+      "name": "PIN-O-CLIP",
+      "price": 49,
+      "image": "assets/images/pinoclip.png"
+    },
+    {
+      "name": "SET-UP BOX REMOTE CONTROL",
+      "price": 79,
+      "image": "assets/images/setupboxremotecontrol.png"
+    },
+    {
+      "name": "UNO CRIKET CARDS",
+      "price": 140,
+      "image": "assets/images/unocriketcards.png"
+    },
+    {
+      "name": "NANO TAPE",
+      "price": 79,
+      "image": "assets/images/nanotape.png"
+    },
+    {
+      "name": "FOLDABLE STUDY TABLE",
+      "price": 499,
+      "image": "assets/images/foldablestudytablelion.png"
+    },
+    {
+      "name": "CAMLIN WHITEBOARD MARKER (GREEN)",
+      "price": 279,
+      "image": "assets/images/camlinwhiteboardmarker(grenn).png"
+    },
+    {
+      "name": "3D CHARGEABLE REMOTE CONTROL CAR",
+      "price": 599,
+      "image": "assets/images/3dchargeablecar.png"
+    },
+    {
+      "name": "CAMLIN WHITE BOARD MARKER INK",
+      "price": 29,
+      "image": "assets/images/camlinwhiteboardmarkerink.png"
+    },
+    {
+      "name": "GOLDEN FOIL DECORATIVE GARLAND",
+      "price": 39,
+      "image": "assets/images/goldenfoildecorativegarland.png"
+    },
+    {
+      "name": "FILE SET (SET OF 6 PICS)",
+      "price": 119,
+      "image": "assets/images/fileset.png"
+    },
+    {
+      "name": "CLTLZEN BLACK CALCULATOR",
+      "price": 99,
+      "image": "assets/images/cltlzenblackcalculator.png"
+    },
+    {
+      "name": "PROFESSIONAL LEATHER DOCUMENT FILE FOLDER",
+      "price": 319,
+      "image": "assets/images/professionalleatherdocumentfilefolder.png"
+    },
+    {
+      "name": "SEWING MACHINE LIGHT",
+      "price": 149,
+      "image": "assets/images/sewingmachinelight.png"
+    },
+    {
+      "name": "DECORATIVE LORD GANESHA LIGHT SHOWPIECE",
+      "price": 179,
+      "image": "assets/images/decorativelordganeshalight.png"
+    },
+    {
+      "name": "CAMEL ACRYLIC COLOURS",
+      "price": 249,
+      "image": "assets/images/camelacryliccolours.png"
+    },
+    {
+      "name": "RADHEY KRISHNA LED LIGHT SHOWPIECE",
+      "price": 249,
+      "image": "assets/images/radheykrishnaledlightshowpiece.png"
+    },
+    {
+      "name": "TRADITIONAL METALLIC FOIL DECORATIVE HANGING",
+      "price": 29,
+      "image": "assets/images/traditionalmetallicfoildecorative.png"
+    },
+    {
+      "name": "CAMLIN SCHOLAR BASICS",
+      "price": 99,
+      "image": "assets/images/camlinscholarbasics.png"
+    },
+    {
+      "name": "GTPL SET-UP BOX REMOTE",
+      "price": 79,
+      "image": "assets/images/gtplsetupboxremote.png"
+    },
+    {
+      "name": "PLASTIC KIDS SAFETY CRAFT SCISSORS",
+      "price": 29,
+      "image": "assets/images/plasticsafetyscissors.png"
+    },
+    {
+      "name": "CAMLIN PASTE (50ML)",
+      "price": 19,
+      "image": "assets/images/camlinpaste50ml.png"
+    },
+    {
+      "name": "CITLIZEN CALCULATOR",
+      "price": 119,
+      "image": "assets/images/citizencalculator.png"
+    },
+    {
+      "name": "CAMLIN PASTE (150ML)",
+      "price": 29,
+      "image": "assets/images/camlinpaste150ml.png"
+    },
+    {
+      "name": "CACTUS TOY",
+      "price": 459,
+      "image": "assets/images/cactustoy.png"
+    }
+  ]

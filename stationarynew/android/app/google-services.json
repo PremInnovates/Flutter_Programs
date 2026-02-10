@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "363894058585",
+    "project_id": "anjaligeneralstore-40b99",
+    "storage_bucket": "anjaligeneralstore-40b99.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363894058585:android:5cbeb7d93459a61bcfcb48",
+        "android_client_info": {
+          "package_name": "com.example.stationarynew"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVYY9nOXszIOJwS3orip-pWE5Tc2QfMsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
