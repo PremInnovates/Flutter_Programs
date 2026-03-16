@@ -1,44 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:feb10_circleavatar_list/app_scaffold.dart';
+import 'package:feb10_circleavatar_list/grid_view.dart';
+import 'package:feb10_circleavatar_list/list_view.dart';
 
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold( // Use Scaffold instead of AppScaffold
-      body: Column(
-        children: [
-          Text("Home Page"),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ListViewDemo()),
-              );
-            },
-            child: Text("Go"),
-          ),
-        ],
-      ),
-    );
-  }
+  State<HomePage> createState() => _HomePageState();
 }
 
-// Make sure to define ListViewDemo widget elsewhere in your code
-class ListViewDemo extends StatelessWidget {
-  const ListViewDemo({super.key});
-
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    // Placeholder for ListViewDemo content
-    return Scaffold(
-      appBar: AppBar(title: Text("ListView Demo")),
-      body: ListView(
-        children: [
-          ListTile(title: Text("Item 1")),
-          ListTile(title: Text("Item 2")),
-        ],
-      ),
+    return AppScaffold(mychildren: 
+    Column(
+      children: [Text("Home Page"),
+      TextButton(onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (builder){
+          return ListViewDemo();
+        }));
+      }, child: Text("View List")),
+
+      TextButton(onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext builder){ return AppScaffold(mychildren: Text("This is about us page"));
+        }));
+      }, child: Text("About Us")),
+      TextButton(onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext builder){ return GridViewDemo();
+        }));
+      }, child: Text("Grid View"))
+      ],
+    )
     );
   }
 }

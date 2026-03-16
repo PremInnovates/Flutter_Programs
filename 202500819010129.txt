@@ -1,0 +1,504 @@
+NAME : VADNERE PREM PARESH
+ENROLLMENT : 202500819010129
+
+Q1. To-Do List App
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(
+    home: TodoScreen(),
+  ));
+}
+
+class TodoScreen extends StatefulWidget {
+  @override
+  _TodoScreenState createState() => _TodoScreenState();
+}
+
+class _TodoScreenState extends State<TodoScreen> {
+  TextEditingController controller = TextEditingController();
+
+  List<Map<String, dynamic>> todos = [];
+
+  void addTask() {
+    String text = controller.text.trim();
+
+    if (text.isNotEmpty) {
+      setState(() {
+        todos.add({"task": text, "done": false});
+      });
+      controller.clear();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("My Todos")),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    hintText: "Enter task",
+                  ),
+                ),
+              ),
+              ElevatedButton(
+                onPressed: addTask,
+                child: Text("Add"),
+              )
+            ],
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: todos.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  value: todos[index]["done"],
+                  title: Text(
+                    todos[index]["task"],
+                    style: TextStyle(
+                      color: todos[index]["done"]
+                          ? Colors.grey
+                          : Colors.black,
+                      decoration: todos[index]["done"]
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      todos[index]["done"] = value;
+                    });
+                  },
+                );
+              },
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+
+Q2. Login and Welcome Screen
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(
+    home: LoginScreen(),
+  ));
+}
+
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  bool remember = false;
+
+  void login() {
+    if (email.text.isNotEmpty && password.text.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WelcomeScreen()),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Fill both fields")),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.all(20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextFormField(
+              controller: email,
+              decoration: InputDecoration(labelText: "Email"),
+            ),
+            TextFormField(
+              controller: password,
+              decoration: InputDecoration(labelText: "Password"),
+            ),
+            Row(
+              children: [
+                Checkbox(
+                  value: remember,
+                  onChanged: (value) {
+                    setState(() {
+                      remember = value!;
+                    });
+                  },
+                ),
+                Text("Remember me")
+              ],
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.indigo,
+                minimumSize: Size(double.infinity, 50),
+              ),
+              onPressed: login,
+              child: Text("Login"),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class WelcomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Welcome")),
+      body: Center(
+        child: Text(
+          "Hello, User!",
+          style: TextStyle(fontSize: 30),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+Q3. ListView with Floating Action Button
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: ItemScreen()));
+}
+
+class ItemScreen extends StatefulWidget {
+  @override
+  _ItemScreenState createState() => _ItemScreenState();
+}
+
+class _ItemScreenState extends State<ItemScreen> {
+  List<String> items = ["Item 1", "Item 2"];
+
+  void addItem() {
+    setState(() {
+      items.add("New Item ${items.length + 1}");
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Items")),
+      body: ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          return ListTile(title: Text(items[index]));
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: addItem,
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+
+Q4. Login Screen with Validation
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: LoginValidation()));
+}
+
+class LoginValidation extends StatefulWidget {
+  @override
+  _LoginValidationState createState() => _LoginValidationState();
+}
+
+class _LoginValidationState extends State<LoginValidation> {
+  final _formKey = GlobalKey<FormState>();
+  bool hidePassword = true;
+
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        padding: EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.indigo, Colors.blue],
+          ),
+        ),
+        child: Center(
+          child: Card(
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextFormField(
+                      controller: email,
+                      decoration: InputDecoration(labelText: "Email"),
+                      validator: (value) {
+                        if (value!.isEmpty) return "Email required";
+                        if (!value.contains("@")) return "Invalid email";
+                        return null;
+                      },
+                    ),
+                    TextFormField(
+                      controller: password,
+                      obscureText: hidePassword,
+                      decoration: InputDecoration(
+                        labelText: "Password",
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              hidePassword = !hidePassword;
+                            });
+                          },
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.length < 8)
+                          return "Minimum 8 characters";
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("Login Successful")),
+                          );
+                        }
+                      },
+                      child: Text("Submit"),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+Q5. Add Books and View Books
+
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: AddBook()));
+}
+
+List<Map<String, String>> books = [];
+
+class AddBook extends StatefulWidget {
+  @override
+  _AddBookState createState() => _AddBookState();
+}
+
+class _AddBookState extends State<AddBook> {
+  TextEditingController title = TextEditingController();
+  TextEditingController author = TextEditingController();
+
+  void addBook() {
+    if (title.text.isNotEmpty && author.text.isNotEmpty) {
+      books.add({
+        "title": title.text,
+        "author": author.text,
+      });
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ViewBooks()),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Add Book")),
+      body: Column(
+        children: [
+          TextField(
+            controller: title,
+            decoration: InputDecoration(labelText: "Book Title"),
+          ),
+          TextField(
+            controller: author,
+            decoration: InputDecoration(labelText: "Author Name"),
+          ),
+          ElevatedButton(
+            onPressed: addBook,
+            child: Text("Add Book"),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class ViewBooks extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("My Books")),
+      body: ListView.builder(
+        itemCount: books.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(books[index]["title"]!),
+            subtitle: Text(books[index]["author"]!),
+          );
+        },
+      ),
+    );
+  }
+}
+
+
+
+Q6. Product Catalog using GridView
+
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: ProductScreen()));
+}
+
+class ProductScreen extends StatelessWidget {
+  final List<Map<String, dynamic>> products = [
+    {
+      "name": "Laptop",
+      "price": 50000,
+      "image": "https://via.placeholder.com/150"
+    },
+    {
+      "name": "Mobile",
+      "price": 20000,
+      "image": "https://via.placeholder.com/150"
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Products")),
+      body: GridView.builder(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+        ),
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          return Card(
+            child: Column(
+              children: [
+                Image.network(products[index]["image"]),
+                Text(products[index]["name"]),
+                Text("₹${products[index]["price"]}"),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+
+
+Q7. Employees Grid Layout
+
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MaterialApp(home: EmployeeScreen()));
+}
+
+class EmployeeScreen extends StatelessWidget {
+  final List<Map<String, String>> employees = [
+    {
+      "name": "Rahul",
+      "dept": "IT",
+      "image": "https://via.placeholder.com/150"
+    },
+    {
+      "name": "Priya",
+      "dept": "HR",
+      "image": "https://via.placeholder.com/150"
+    },
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Employees")),
+      body: GridView.builder(
+        gridDelegate:
+            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+        itemCount: employees.length,
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(employees[index]["name"]!)),
+              );
+            },
+            child: Card(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    backgroundImage:
+                        NetworkImage(employees[index]["image"]!),
+                    radius: 40,
+                  ),
+                  Text(employees[index]["name"]!),
+                  Text(employees[index]["dept"]!),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

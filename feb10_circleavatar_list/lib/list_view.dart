@@ -10,12 +10,16 @@ class ListViewDemo extends StatefulWidget {
 class _ListViewDemoState extends State<ListViewDemo> {
   @override
   Widget build(BuildContext context) {
-    List<String> names = ['A', 'B', 'C', 'D', 'E'];
+    List<String> names = [
+      'Shiv',
+      'Bholenath',
+      'Neelkanth',
+      'Mahadev',
+      'Shankar',
+    ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('ListView Demo'),
-      ),
+      appBar: AppBar(title: const Text('ListView Demo')),
       body: ListView.separated(
         itemCount: names.length,
         itemBuilder: (context, index) {
