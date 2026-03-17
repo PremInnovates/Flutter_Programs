@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
-
-import 'package:local_seva/screens/splash_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
-  runApp(const LocalSevaApp());
+  runApp(const MyApp());
 }
 
-class LocalSevaApp extends StatelessWidget {
-  const LocalSevaApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Local Seva',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        fontFamily: 'Poppins',
+        useMaterial3: true,
+      ),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: SplashScreen(),
     );
   }
 }

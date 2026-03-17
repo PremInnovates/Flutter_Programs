@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'provider_list_screen.dart';
+import 'booking_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  final List<Map<String, dynamic>> categories = [
+  const HomeScreen({super.key}); // Important: const constructor
+
+  // Remove 'final' and make lists static const
+  static const List<Map<String, dynamic>> categories = [
     {
       'name': 'AC Repair',
       'icon': Icons.ac_unit,
@@ -47,7 +50,7 @@ class HomeScreen extends StatelessWidget {
     },
   ];
 
-  final List<Map<String, dynamic>> featuredServices = [
+  static const List<Map<String, dynamic>> featuredServices = [
     {
       'title': 'Emergency Service',
       'subtitle': '24/7 Available',
@@ -73,8 +76,6 @@ class HomeScreen extends StatelessWidget {
       'color': Colors.blue,
     },
   ];
-
-  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +181,7 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  
+
                   // Search Bar
                   Container(
                     decoration: BoxDecoration(
@@ -198,10 +199,18 @@ class HomeScreen extends StatelessWidget {
                       decoration: InputDecoration(
                         hintText: "Search for services...",
                         hintStyle: TextStyle(color: Colors.grey[400]),
-                        prefixIcon: const Icon(Icons.search, color: Color(0xFF1E3C72)),
-                        suffixIcon: const Icon(Icons.mic, color: Color(0xFF1E3C72)),
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: Color(0xFF1E3C72),
+                        ),
+                        suffixIcon: const Icon(
+                          Icons.mic,
+                          color: Color(0xFF1E3C72),
+                        ),
                         border: InputBorder.none,
-                        contentPadding: const EdgeInsets.symmetric(vertical: 15),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 15,
+                        ),
                       ),
                     ),
                   ),
@@ -219,10 +228,7 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   const Text(
                     "Featured Services",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 15),
                   SizedBox(
@@ -231,7 +237,7 @@ class HomeScreen extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       itemCount: featuredServices.length,
                       itemBuilder: (context, index) {
-                        return _buildFeatureCard(index);
+                        return _buildFeatureCard(index, context);
                       },
                     ),
                   ),
@@ -249,10 +255,7 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   const Text(
                     "Browse Categories",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   TextButton(
                     onPressed: () {},
@@ -295,79 +298,90 @@ class HomeScreen extends StatelessWidget {
             // Special Offer Banner
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFFFF6B6B), Color(0xFF4ECDC4)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.blue.withOpacity(0.2),
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          BookingScreen(serviceType: 'Cleaning'),
                     ),
-                  ],
-                ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      right: -20,
-                      bottom: -20,
-                      child: Icon(
-                        Icons.local_offer,
-                        size: 120,
-                        color: Colors.white.withOpacity(0.2),
+                  );
+                },
+                child: Container(
+                  height: 150,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFFFF6B6B), Color(0xFF4ECDC4)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blue.withOpacity(0.2),
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Special Offer!",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            "Get 20% off on your first booking",
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.9),
-                              fontSize: 14,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 15,
-                              vertical: 5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Text(
-                              "USE: FIRST20",
+                    ],
+                  ),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        right: -20,
+                        bottom: -20,
+                        child: Icon(
+                          Icons.local_offer,
+                          size: 120,
+                          color: Colors.white.withOpacity(0.2),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Special Offer!",
                               style: TextStyle(
-                                color: Color(0xFF1E3C72),
+                                color: Colors.white,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 12,
                               ),
                             ),
-                          ),
-                        ],
+                            const SizedBox(height: 5),
+                            Text(
+                              "Get 20% off on your first booking",
+                              style: TextStyle(
+                                color: Colors.white.withOpacity(0.9),
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 15,
+                                vertical: 5,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Text(
+                                "USE: FIRST20",
+                                style: TextStyle(
+                                  color: Color(0xFF1E3C72),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -378,7 +392,10 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Quick book action
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const BookingScreen()),
+          );
         },
         backgroundColor: const Color(0xFF1E3C72),
         child: const Icon(Icons.support_agent, color: Colors.white),
@@ -386,71 +403,79 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildFeatureCard(int index) {
-    return Container(
-      width: 150,
-      margin: const EdgeInsets.only(right: 12),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: featuredServices[index]['bgColor'] ?? Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        gradient: LinearGradient(
-          colors: [
-            featuredServices[index]['color'].withOpacity(0.1),
-            Colors.white,
+  Widget _buildFeatureCard(int index, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                BookingScreen(serviceType: featuredServices[index]['title']),
+          ),
+        );
+      },
+      child: Container(
+        width: 150,
+        margin: const EdgeInsets.only(right: 12),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: featuredServices[index]['bgColor'] ?? Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          gradient: LinearGradient(
+            colors: [
+              featuredServices[index]['color'].withOpacity(0.1),
+              Colors.white,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          border: Border.all(color: Colors.grey[200]!),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
           ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
         ),
-        border: Border.all(color: Colors.grey[200]!),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: featuredServices[index]['color'].withOpacity(0.1),
-              shape: BoxShape.circle,
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: featuredServices[index]['color'].withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                featuredServices[index]['icon'],
+                color: featuredServices[index]['color'],
+                size: 24,
+              ),
             ),
-            child: Icon(
-              featuredServices[index]['icon'],
-              color: featuredServices[index]['color'],
-              size: 24,
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  featuredServices[index]['title'],
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    featuredServices[index]['title'],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  featuredServices[index]['subtitle'],
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    fontSize: 10,
+                  Text(
+                    featuredServices[index]['subtitle'],
+                    style: TextStyle(color: Colors.grey[600], fontSize: 10),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -461,9 +486,8 @@ class HomeScreen extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => ProviderListScreen(
-              category: categories[index]['name'],
-            ),
+            builder: (context) =>
+                BookingScreen(serviceType: categories[index]['name']),
           ),
         );
       },
@@ -521,10 +545,7 @@ class HomeScreen extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         categories[index]['count'],
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(fontSize: 11, color: Colors.grey[600]),
                       ),
                     ],
                   ),
@@ -537,4 +558,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
