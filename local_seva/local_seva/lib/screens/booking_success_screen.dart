@@ -1,11 +1,60 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home_screen.dart';
 import 'my_booking_screen.dart';
 
-class BookingSuccessScreen extends StatelessWidget {
+class BookingSuccessScreen extends StatefulWidget {
   final Map<String, dynamic>? bookingDetails;
 
   const BookingSuccessScreen({super.key, this.bookingDetails});
+
+  @override
+  State<BookingSuccessScreen> createState() => _BookingSuccessScreenState();
+}
+
+class _BookingSuccessScreenState extends State<BookingSuccessScreen> {
+  static const String _bookingsKey = 'user_bookings';
+
+  @override
+  void initState() {
+    super.initState();
+    _saveCurrentBooking();
+  }
+
+  Future<void> _saveCurrentBooking() async {
+    // Prepare booking data with unique ID and createdAt timestamp
+    Map<String, dynamic> newBooking = Map.from(widget.bookingDetails ?? {});
+    newBooking['id'] =
+        newBooking['bookingId'] ?? 'BK${DateTime.now().millisecondsSinceEpoch}';
+    newBooking['status'] = 'upcoming';
+    newBooking['rating'] = null;
+    newBooking['providerImage'] = (newBooking['provider']?.isNotEmpty == true)
+        ? newBooking['provider'][0]
+        : '?';
+    // ✅ Add createdAt timestamp (milliseconds since epoch)
+    newBooking['createdAt'] = DateTime.now().millisecondsSinceEpoch;
+
+    // Load existing bookings
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? existingJson = prefs.getString(_bookingsKey);
+    List<Map<String, dynamic>> allBookings = [];
+
+    if (existingJson != null) {
+      List<dynamic> decoded = jsonDecode(existingJson);
+      allBookings = decoded.cast<Map<String, dynamic>>();
+    }
+
+    // Avoid duplicates
+    bool exists = allBookings.any((b) => b['id'] == newBooking['id']);
+    if (!exists) {
+      allBookings.add(newBooking);
+      await prefs.setString(_bookingsKey, jsonEncode(allBookings));
+      debugPrint("✅ Booking saved: ${newBooking['id']}");
+    } else {
+      debugPrint("⚠️ Booking already exists: ${newBooking['id']}");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -185,34 +234,35 @@ class BookingSuccessScreen extends StatelessWidget {
                                   _buildDetailRow(
                                     Icons.build,
                                     "Service",
-                                    bookingDetails?['service'] ?? "AC Repair",
+                                    widget.bookingDetails?['service'] ??
+                                        "AC Repair",
                                   ),
                                   _buildDetailRow(
                                     Icons.person,
                                     "Provider",
-                                    bookingDetails?['provider'] ??
+                                    widget.bookingDetails?['provider'] ??
                                         "Ramesh Patel",
                                   ),
                                   _buildDetailRow(
                                     Icons.calendar_today,
                                     "Date & Time",
-                                    _formatDateTime(bookingDetails),
+                                    _formatDateTime(widget.bookingDetails),
                                   ),
                                   _buildDetailRow(
                                     Icons.location_on,
                                     "Location",
-                                    bookingDetails?['address'] ?? "Home",
+                                    widget.bookingDetails?['address'] ?? "Home",
                                   ),
                                   _buildDetailRow(
                                     Icons.currency_rupee,
                                     "Total Amount",
-                                    "₹${bookingDetails?['amount'] ?? 499}",
+                                    "₹${widget.bookingDetails?['amount'] ?? 499}",
                                   ),
                                   const Divider(height: 24),
                                   _buildDetailRow(
                                     Icons.confirmation_number,
                                     "Booking ID",
-                                    bookingDetails?['bookingId'] ??
+                                    widget.bookingDetails?['bookingId'] ??
                                         "#BK${DateTime.now().millisecondsSinceEpoch.toString().substring(8)}",
                                     isHighlight: true,
                                   ),
@@ -264,50 +314,17 @@ class BookingSuccessScreen extends StatelessWidget {
 
                               const SizedBox(height: 12),
 
-                              // View My Bookings Button - FIXED
+                              // View My Bookings Button
                               SizedBox(
                                 width: double.infinity,
                                 height: 55,
                                 child: OutlinedButton.icon(
                                   onPressed: () {
-                                    // Create a booking object for the current booking
-                                    final currentBooking = {
-                                      'id':
-                                          bookingDetails?['bookingId'] ??
-                                          'BK${DateTime.now().millisecondsSinceEpoch}',
-                                      'service':
-                                          bookingDetails?['service'] ??
-                                          'AC Repair',
-                                      'provider':
-                                          bookingDetails?['provider'] ??
-                                          'Ramesh Patel',
-                                      'providerImage':
-                                          (bookingDetails?['provider']?[0] ??
-                                          'R')[0],
-                                      'date': _extractDate(
-                                        bookingDetails?['dateTime'],
-                                      ),
-                                      'time': _extractTime(
-                                        bookingDetails?['dateTime'],
-                                      ),
-                                      'amount':
-                                          bookingDetails?['amount'] ?? 499,
-                                      'status': 'upcoming',
-                                      'rating': null,
-                                      'address':
-                                          bookingDetails?['address'] ?? 'Home',
-                                      'paymentMethod':
-                                          bookingDetails?['paymentMethod'] ??
-                                          'Cash on Service',
-                                    };
-
-                                    // Navigate to MyBookingsScreen with the current booking
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => MyBookingsScreen(
-                                          initialBookings: [currentBooking],
-                                        ),
+                                        builder: (context) =>
+                                            const MyBookingsScreen(),
                                       ),
                                     );
                                   },
@@ -372,31 +389,11 @@ class BookingSuccessScreen extends StatelessWidget {
   // Helper method to format date and time
   String _formatDateTime(Map<String, dynamic>? details) {
     if (details == null) return "15 Mar 2024, 10:00 AM";
-
     String date = details['date'] ?? "15 Mar 2024";
     String time = details['time'] ?? "10:00 AM";
     return "$date, $time";
   }
 
-  // Extract date from dateTime string
-  String _extractDate(String? dateTime) {
-    if (dateTime == null) return "15 Mar 2024";
-    if (dateTime.contains(',')) {
-      return dateTime.split(',')[0].trim();
-    }
-    return dateTime;
-  }
-
-  // Extract time from dateTime string
-  String _extractTime(String? dateTime) {
-    if (dateTime == null) return "10:00 AM";
-    if (dateTime.contains(',')) {
-      return dateTime.split(',')[1].trim();
-    }
-    return "10:00 AM";
-  }
-
-  // Show track order dialog
   void _showTrackOrderDialog(BuildContext context) {
     showDialog(
       context: context,

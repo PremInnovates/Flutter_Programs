@@ -3,7 +3,6 @@ import 'home_screen.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
-  // Stateless -> Stateful
   const LoginScreen({super.key});
 
   @override
@@ -14,7 +13,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  // Password visibility ke liye variable 
   bool _isPasswordVisible = false;
 
   @override
@@ -141,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 padding: const EdgeInsets.all(30.0),
                                 child: Column(
                                   children: [
-                                    // Email Field with Custom Design
+                                    // Email Field
                                     TextField(
                                       controller: emailController,
                                       keyboardType: TextInputType.emailAddress,
@@ -178,11 +176,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                     const SizedBox(height: 20),
 
-                                    // Password Field with Custom Design
+                                    // Password Field
                                     TextField(
                                       controller: passwordController,
-                                      obscureText:
-                                          !_isPasswordVisible, // Toggle visibility
+                                      obscureText: !_isPasswordVisible,
                                       style: const TextStyle(fontSize: 16),
                                       decoration: InputDecoration(
                                         labelText: "Password",
@@ -200,14 +197,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         suffixIcon: IconButton(
                                           icon: Icon(
-                                            // Change icon based on visibility
                                             _isPasswordVisible
                                                 ? Icons.visibility_outlined
                                                 : Icons.visibility_off_outlined,
                                             color: Colors.grey[600],
                                           ),
                                           onPressed: () {
-                                            // Toggle password visibility
                                             setState(() {
                                               _isPasswordVisible =
                                                   !_isPasswordVisible;
@@ -256,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                                     const SizedBox(height: 20),
 
-                                    // Login Button with Gradient
+                                    // Login Button
                                     Container(
                                       width: double.infinity,
                                       height: 55,
@@ -311,62 +306,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                     ),
 
-                                    const SizedBox(height: 25),
-
-                                    // OR Divider
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            height: 1,
-                                            color: Colors.grey[300],
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 15,
-                                          ),
-                                          child: Text(
-                                            "OR",
-                                            style: TextStyle(
-                                              color: Colors.grey[600],
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Container(
-                                            height: 1,
-                                            color: Colors.grey[300],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-
-                                    const SizedBox(height: 25),
-
-                                    // Social Login Buttons
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        _buildSocialButton(
-                                          icon: Icons.g_mobiledata,
-                                          color: Colors.red,
-                                          onPressed: () {},
-                                        ),
-                                        _buildSocialButton(
-                                          icon: Icons.facebook,
-                                          color: Colors.blue,
-                                          onPressed: () {},
-                                        ),
-                                        _buildSocialButton(
-                                          icon: Icons.apple,
-                                          color: Colors.black,
-                                          onPressed: () {},
-                                        ),
-                                      ],
-                                    ),
+                                    // Removed OR divider and social buttons
                                   ],
                                 ),
                               ),
@@ -422,35 +362,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget _buildSocialButton({
-    required IconData icon,
-    required Color color,
-    required VoidCallback onPressed,
-  }) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: 55,
-        height: 55,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Icon(icon, color: color, size: 30),
-      ),
-    );
-  }
-
   @override
   void dispose() {
-    // Clean up controllers when widget is disposed
     emailController.dispose();
     passwordController.dispose();
     super.dispose();

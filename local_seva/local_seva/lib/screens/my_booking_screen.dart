@@ -1,6 +1,7 @@
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'booking_success_screen.dart';
-import 'provider_profile_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyBookingsScreen extends StatefulWidget {
   final List<Map<String, dynamic>>? initialBookings;
@@ -15,9 +16,9 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   int _selectedTabIndex = 0;
-
-  // Bookings list - will be populated from widget or defaults
-  late List<Map<String, dynamic>> allBookings;
+  List<Map<String, dynamic>> allBookings = [];
+  static const String _bookingsKey = 'user_bookings';
+  Timer? _statusUpdateTimer;
 
   @override
   void initState() {
@@ -28,70 +29,134 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
         _selectedTabIndex = _tabController.index;
       });
     });
-
-    // Initialize with passed bookings or defaults
-    allBookings =
-        widget.initialBookings ??
-        [
-          {
-            'id': 'BK001',
-            'service': 'AC Repair',
-            'provider': 'Ramesh Patel',
-            'providerImage': 'RP',
-            'date': '15 Mar 2026',
-            'time': '10:00 AM',
-            'amount': 499,
-            'status': 'completed',
-            'rating': 5,
-            'address': 'Home',
-            'paymentMethod': 'Cash on Service',
-          },
-          {
-            'id': 'BK002',
-            'service': 'Plumbing',
-            'provider': 'Suresh Yadav',
-            'providerImage': 'SY',
-            'date': '18 Mar 2026',
-            'time': '2:00 PM',
-            'amount': 399,
-            'status': 'upcoming',
-            'rating': null,
-            'address': 'Office',
-            'paymentMethod': 'Cash on Service',
-          },
-          {
-            'id': 'BK003',
-            'service': 'Cleaning',
-            'provider': 'Priya Sharma',
-            'providerImage': 'PS',
-            'date': '10 Mar 2026',
-            'time': '11:00 AM',
-            'amount': 599,
-            'status': 'ongoing',
-            'rating': null,
-            'address': 'Home',
-            'paymentMethod': 'Cash on Service',
-          },
-          {
-            'id': 'BK004',
-            'service': 'Electrical',
-            'provider': 'Amit Kumar',
-            'providerImage': 'AK',
-            'date': '05 Mar 2026',
-            'time': '3:00 PM',
-            'amount': 349,
-            'status': 'cancelled',
-            'rating': null,
-            'address': 'Home',
-            'paymentMethod': 'Cash on Service',
-          },
-        ];
+    _loadBookings();
+    _startAutoStatusUpdater();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _statusUpdateTimer?.cancel();
     super.dispose();
+  }
+
+  void _startAutoStatusUpdater() {
+    _statusUpdateTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _checkAndUpdateUpcomingToOngoing();
+    });
+  }
+
+  Future<void> _checkAndUpdateUpcomingToOngoing() async {
+    bool changed = false;
+    final now = DateTime.now().millisecondsSinceEpoch;
+    for (int i = 0; i < allBookings.length; i++) {
+      final booking = allBookings[i];
+      if (booking['status'] == 'upcoming') {
+        int createdAt = booking['createdAt'] ?? 0;
+        if (createdAt > 0 && now - createdAt >= 5000) {
+          // 5 seconds
+          allBookings[i]['status'] = 'ongoing';
+          changed = true;
+        }
+      }
+    }
+    if (changed) {
+      await _saveBookings();
+      setState(() {}); // Refresh UI
+    }
+  }
+
+  Future<void> _loadBookings() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? bookingsJson = prefs.getString(_bookingsKey);
+
+    if (bookingsJson != null) {
+      List<dynamic> decoded = jsonDecode(bookingsJson);
+      setState(() {
+        allBookings = decoded.cast<Map<String, dynamic>>();
+      });
+    } else {
+      List<Map<String, dynamic>> defaultBookings =
+          widget.initialBookings ??
+          [
+            {
+              'id': 'BK001',
+              'service': 'AC Repair',
+              'provider': 'Ramesh Patel',
+              'providerImage': 'RP',
+              'date': '15 Mar 2026',
+              'time': '10:00 AM',
+              'amount': 499,
+              'status': 'completed',
+              'rating': 5,
+              'address': 'Home',
+              'paymentMethod': 'Cash on Service',
+              'createdAt': DateTime.now().millisecondsSinceEpoch - 60000,
+            },
+            {
+              'id': 'BK002',
+              'service': 'Plumbing',
+              'provider': 'Suresh Yadav',
+              'providerImage': 'SY',
+              'date': '18 Mar 2026',
+              'time': '2:00 PM',
+              'amount': 399,
+              'status': 'upcoming',
+              'rating': null,
+              'address': 'Office',
+              'paymentMethod': 'Cash on Service',
+              'createdAt': DateTime.now().millisecondsSinceEpoch,
+            },
+            {
+              'id': 'BK003',
+              'service': 'Cleaning',
+              'provider': 'Priya Sharma',
+              'providerImage': 'PS',
+              'date': '10 Mar 2026',
+              'time': '11:00 AM',
+              'amount': 599,
+              'status': 'ongoing',
+              'rating': null,
+              'address': 'Home',
+              'paymentMethod': 'Cash on Service',
+              'createdAt': DateTime.now().millisecondsSinceEpoch - 30000,
+            },
+            {
+              'id': 'BK004',
+              'service': 'Electrical',
+              'provider': 'Amit Kumar',
+              'providerImage': 'AK',
+              'date': '05 Mar 2026',
+              'time': '3:00 PM',
+              'amount': 349,
+              'status': 'cancelled',
+              'rating': null,
+              'address': 'Home',
+              'paymentMethod': 'Cash on Service',
+              'createdAt': DateTime.now().millisecondsSinceEpoch - 86400000,
+            },
+          ];
+      setState(() {
+        allBookings = defaultBookings;
+      });
+      await _saveBookings();
+    }
+  }
+
+  Future<void> _saveBookings() async {
+    final prefs = await SharedPreferences.getInstance();
+    String jsonString = jsonEncode(allBookings);
+    await prefs.setString(_bookingsKey, jsonString);
+  }
+
+  Future<void> _updateBooking(
+    int index,
+    Map<String, dynamic> updatedBooking,
+  ) async {
+    setState(() {
+      allBookings[index] = updatedBooking;
+    });
+    await _saveBookings();
   }
 
   List<Map<String, dynamic>> get currentBookings {
@@ -108,15 +173,16 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
 
   List<Map<String, dynamic>> get filteredBookings {
     switch (_selectedTabIndex) {
-      case 0: // Current
+      case 0:
         return currentBookings;
-      case 1: // Previous
+      case 1:
         return previousBookings;
       default:
         return allBookings;
     }
   }
 
+  // ================== BUILD METHOD ==================
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,8 +197,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               colors: [Color(0xFF1E3C72), Color(0xFF2A5298)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
             ),
           ),
         ),
@@ -169,7 +233,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
       ),
       body: Column(
         children: [
-          // Stats Summary
           Container(
             padding: const EdgeInsets.all(16),
             color: Colors.white,
@@ -197,8 +260,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
               ],
             ),
           ),
-
-          // Booking List
           Expanded(
             child: filteredBookings.isEmpty
                 ? _buildEmptyState()
@@ -206,7 +267,11 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                     padding: const EdgeInsets.all(16),
                     itemCount: filteredBookings.length,
                     itemBuilder: (context, index) {
-                      return _buildBookingCard(filteredBookings[index]);
+                      final booking = filteredBookings[index];
+                      final originalIndex = allBookings.indexWhere(
+                        (b) => b['id'] == booking['id'],
+                      );
+                      return _buildBookingCard(booking, originalIndex);
                     },
                   ),
           ),
@@ -251,7 +316,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
     return total.toString();
   }
 
-  Widget _buildBookingCard(Map<String, dynamic> booking) {
+  Widget _buildBookingCard(Map<String, dynamic> booking, int originalIndex) {
     Color statusColor;
     IconData statusIcon;
 
@@ -278,9 +343,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
     }
 
     return GestureDetector(
-      onTap: () {
-        _showBookingDetails(context, booking);
-      },
+      onTap: () => _showBookingDetails(context, booking),
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
@@ -296,7 +359,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
         ),
         child: Column(
           children: [
-            // Top Section with Status
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -337,13 +399,10 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                 ],
               ),
             ),
-
-            // Main Content
             Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  // Provider Image
                   Container(
                     width: 60,
                     height: 60,
@@ -363,8 +422,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                     ),
                   ),
                   const SizedBox(width: 16),
-
-                  // Booking Details
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,8 +476,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                       ],
                     ),
                   ),
-
-                  // Price
                   Column(
                     children: [
                       Text(
@@ -454,8 +509,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                 ],
               ),
             ),
-
-            // Bottom Actions
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -463,7 +516,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: _getActionButtons(booking),
+                children: _getActionButtons(booking, originalIndex),
               ),
             ),
           ],
@@ -472,7 +525,10 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
     );
   }
 
-  List<Widget> _getActionButtons(Map<String, dynamic> booking) {
+  List<Widget> _getActionButtons(
+    Map<String, dynamic> booking,
+    int originalIndex,
+  ) {
     List<Widget> buttons = [];
 
     if (booking['status'] == 'upcoming') {
@@ -481,17 +537,31 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
           icon: Icons.cancel,
           label: 'Cancel',
           color: Colors.red,
-          onTap: () => _showCancelDialog(booking),
+          onTap: () => _showCancelDialog(booking, originalIndex),
         ),
         const SizedBox(width: 8),
       ]);
-    } else if (booking['status'] == 'completed' && booking['rating'] == null) {
+    }
+
+    if (booking['status'] == 'ongoing') {
+      buttons.addAll([
+        _buildActionButton(
+          icon: Icons.check_circle,
+          label: 'Complete',
+          color: Colors.green,
+          onTap: () => _completeBooking(booking, originalIndex),
+        ),
+        const SizedBox(width: 8),
+      ]);
+    }
+
+    if (booking['status'] == 'completed' && booking['rating'] == null) {
       buttons.add(
         _buildActionButton(
           icon: Icons.star,
           label: 'Rate',
           color: Colors.amber,
-          onTap: () => _showRatingDialog(booking),
+          onTap: () => _showRatingDialog(booking, originalIndex),
         ),
       );
     }
@@ -504,7 +574,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
         onTap: () => _showBookingDetails(context, booking),
       ),
     );
-
     return buttons;
   }
 
@@ -530,6 +599,130 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _completeBooking(Map<String, dynamic> booking, int index) async {
+    bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Complete Service'),
+        content: Text('Mark this ${booking['service']} booking as completed?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('No'),
+          ),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+            child: const Text('Yes, Complete'),
+          ),
+        ],
+      ),
+    );
+    if (confirm == true) {
+      Map<String, dynamic> updated = Map.from(booking);
+      updated['status'] = 'completed';
+      await _updateBooking(index, updated);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Service completed!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+  }
+
+  void _showCancelDialog(Map<String, dynamic> booking, int index) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Cancel Booking'),
+        content: Text(
+          'Are you sure you want to cancel your ${booking['service']} booking?',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('No'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              Map<String, dynamic> updated = Map.from(booking);
+              updated['status'] = 'cancelled';
+              await _updateBooking(index, updated);
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Booking cancelled'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('Yes, Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showRatingDialog(Map<String, dynamic> booking, int index) {
+    int rating = 0;
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setStateDialog) => AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text('Rate Your Experience'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('How was your service with ${booking['provider']}?'),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  5,
+                  (i) => IconButton(
+                    icon: Icon(
+                      i < rating ? Icons.star : Icons.star_border,
+                      color: Colors.amber,
+                      size: 32,
+                    ),
+                    onPressed: () => setStateDialog(() => rating = i + 1),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Skip'),
+            ),
+            ElevatedButton(
+              onPressed: rating > 0
+                  ? () async {
+                      Map<String, dynamic> updated = Map.from(booking);
+                      updated['rating'] = rating;
+                      await _updateBooking(index, updated);
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Thank you for rating!')),
+                      );
+                    }
+                  : null,
+              child: const Text('Submit'),
             ),
           ],
         ),
@@ -568,15 +761,9 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
           if (_selectedTabIndex == 0) const SizedBox(height: 20),
           if (_selectedTabIndex == 0)
             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.pop(context),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF1E3C72),
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
               ),
               child: const Text('Book a Service'),
             ),
@@ -590,150 +777,139 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.7,
-          minChildSize: 0.5,
-          maxChildSize: 0.95,
-          builder: (context, scrollController) {
-            return Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.7,
+        minChildSize: 0.5,
+        maxChildSize: 0.95,
+        builder: (context, scrollController) => Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(25),
+              topRight: Radius.circular(25),
+            ),
+          ),
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 12),
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              child: Column(
-                children: [
-                  // Handle bar
-                  Container(
-                    margin: const EdgeInsets.only(top: 12),
-                    width: 40,
-                    height: 4,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2),
+              Expanded(
+                child: ListView(
+                  controller: scrollController,
+                  padding: const EdgeInsets.all(20),
+                  children: [
+                    const Text(
+                      'Booking Details',
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-
-                  Expanded(
-                    child: ListView(
-                      controller: scrollController,
-                      padding: const EdgeInsets.all(20),
+                    const SizedBox(height: 20),
+                    Row(
                       children: [
-                        const Text(
-                          'Booking Details',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF1E3C72).withOpacity(0.1),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: Text(
+                              booking['providerImage'] ??
+                                  booking['provider'][0],
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF1E3C72),
+                              ),
+                            ),
                           ),
                         ),
-                        const SizedBox(height: 20),
-
-                        // Provider Info
-                        Row(
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF1E3C72).withOpacity(0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  booking['providerImage'] ??
-                                      booking['provider'][0],
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF1E3C72),
-                                  ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                booking['provider'],
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    booking['provider'],
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    booking['service'],
-                                    style: TextStyle(color: Colors.grey[600]),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 24),
-
-                        // Details Grid
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[50],
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Column(
-                            children: [
-                              _buildDetailRow(
-                                Icons.calendar_today,
-                                'Date',
-                                booking['date'],
-                              ),
-                              _buildDetailRow(
-                                Icons.access_time,
-                                'Time',
-                                booking['time'],
-                              ),
-                              _buildDetailRow(
-                                Icons.location_on,
-                                'Location',
-                                booking['address'],
-                              ),
-                              _buildDetailRow(
-                                Icons.payment,
-                                'Payment',
-                                booking['paymentMethod'],
-                              ),
-                              _buildDetailRow(
-                                Icons.currency_rupee,
-                                'Amount',
-                                '₹${booking['amount']}',
-                              ),
-                              _buildDetailRow(
-                                Icons.confirmation_number,
-                                'Booking ID',
-                                booking['id'],
-                              ),
-                              _buildDetailRow(
-                                Icons.info,
-                                'Status',
-                                booking['status'].toUpperCase(),
+                              const SizedBox(height: 4),
+                              Text(
+                                booking['service'],
+                                style: TextStyle(color: Colors.grey[600]),
                               ),
                             ],
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 24),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[50],
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Column(
+                        children: [
+                          _buildDetailRow(
+                            Icons.calendar_today,
+                            'Date',
+                            booking['date'],
+                          ),
+                          _buildDetailRow(
+                            Icons.access_time,
+                            'Time',
+                            booking['time'],
+                          ),
+                          _buildDetailRow(
+                            Icons.location_on,
+                            'Location',
+                            booking['address'],
+                          ),
+                          _buildDetailRow(
+                            Icons.payment,
+                            'Payment',
+                            booking['paymentMethod'],
+                          ),
+                          _buildDetailRow(
+                            Icons.currency_rupee,
+                            'Amount',
+                            '₹${booking['amount']}',
+                          ),
+                          _buildDetailRow(
+                            Icons.confirmation_number,
+                            'Booking ID',
+                            booking['id'],
+                          ),
+                          _buildDetailRow(
+                            Icons.info,
+                            'Status',
+                            booking['status'].toUpperCase(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            );
-          },
-        );
-      },
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -754,122 +930,6 @@ class _MyBookingsScreenState extends State<MyBookingsScreen>
           ),
         ],
       ),
-    );
-  }
-
-  void _showCancelDialog(Map<String, dynamic> booking) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: const Text('Cancel Booking'),
-          content: Text(
-            'Are you sure you want to cancel your ${booking['service']} booking?',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('No'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  booking['status'] = 'cancelled';
-                });
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Booking cancelled successfully'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-              ),
-              child: const Text('Yes, Cancel'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showRatingDialog(Map<String, dynamic> booking) {
-    int rating = 0;
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              title: const Text('Rate Your Experience'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'How was your service with ${booking['provider']}?',
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(5, (index) {
-                      return IconButton(
-                        icon: Icon(
-                          index < rating ? Icons.star : Icons.star_border,
-                          color: Colors.amber,
-                          size: 32,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            rating = index + 1;
-                          });
-                        },
-                      );
-                    }),
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: const Text('Skip'),
-                ),
-                ElevatedButton(
-                  onPressed: rating > 0
-                      ? () {
-                          setState(() {
-                            booking['rating'] = rating;
-                          });
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Thank you for your rating!'),
-                              backgroundColor: Colors.green,
-                            ),
-                          );
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1E3C72),
-                    foregroundColor: Colors.white,
-                  ),
-                  child: const Text('Submit'),
-                ),
-              ],
-            );
-          },
-        );
-      },
     );
   }
 }

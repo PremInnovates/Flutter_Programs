@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'booking_screen.dart';
+import 'my_booking_screen.dart'; // 👈 Import for MyBookingsScreen
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key}); // Important: const constructor
+  const HomeScreen({super.key});
 
-  // Remove 'final' and make lists static const
   static const List<Map<String, dynamic>> categories = [
     {
       'name': 'AC Repair',
@@ -102,6 +102,19 @@ class HomeScreen extends StatelessWidget {
         ),
         elevation: 0,
         actions: [
+          // 👇 NEW: My Bookings Button
+          IconButton(
+            icon: const Icon(Icons.list_alt),
+            tooltip: 'My Bookings',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MyBookingsScreen(),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
             onPressed: () {},
@@ -117,7 +130,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Welcome Section
+            // Welcome Section (unchanged)
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -220,7 +233,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // Featured Services
+            // Featured Services (unchanged)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
@@ -247,7 +260,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            // Categories Section
+            // Categories Section (unchanged)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
@@ -273,7 +286,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 15),
 
-            // Categories Grid
+            // Categories Grid (unchanged)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: GridView.builder(
@@ -295,7 +308,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            // Special Offer Banner
+            // Special Offer Banner (unchanged)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: GestureDetector(
